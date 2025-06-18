@@ -1,0 +1,30 @@
+name: 'Github Action Wework Bot'
+
+on:
+  workflow_dispatch:
+  schedule:
+    # GitHub Actions 始终以 UTC 时间为准
+    - cron: '0 */4 * * *'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Go
+      uses: actions/setup-go@v5
+      with:
+        go-version: '1.22'
+
+    - name: Install dependencies
+      run: go mod tidy
+
+    - name: Run Go script
+      env:
+        BOT_KEY: ${{ secrets.BOT_KEY }}
+        GDRIVE_CREDENTIALS: ${{ secrets.GDRIVE_CREDENTIALS }}
+        FILE_ID: ${{ secrets.FILE_ID }}
+      run: go run main.go
