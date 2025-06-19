@@ -26,5 +26,5 @@ jobs:
       env:
         BOT_KEY: ${{ secrets.BOT_KEY }}
         GDRIVE_CREDENTIALS: ${{ secrets.GDRIVE_CREDENTIALS }}
-        FILE_ID: ${{ secrets.FILE_ID }}
+        DIR_ID: ${{ secrets.DIR_ID }}
       run: go run main.go

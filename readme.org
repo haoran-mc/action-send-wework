@@ -4,4 +4,4 @@
 1. [[https://console.developers.google.com][Google Developer Console]] enable google-drive api;
 2. [[https://console.cloud.google.com/cloud-resource-manager][Choose Google Cloud Project]]
 3. [[https://console.cloud.google.com/iam-admin/serviceaccounts/details/111006398836738514414/keys?inv=1&invt=Ab0Viw&project=test-export-import-377808][Create Service Account]]
-4. [[https://work.weixin.qq.com/api/doc/90000/90136/91770][wework reboto interfaces]];
+4. [[https://work.weixin.qq.com/api/doc/90000/90136/91770][wework robot interfaces]];
