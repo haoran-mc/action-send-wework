@@ -6,6 +6,7 @@ import (
 
 	"github.com/haoran-mc/action-send-wework/internal/model"
 	googledrive "github.com/haoran-mc/action-send-wework/internal/repository/google-drive"
+	"github.com/haoran-mc/action-send-wework/internal/service"
 	"github.com/haoran-mc/golib/pkg/env"
 	"github.com/haoran-mc/golib/pkg/log"
 	"google.golang.org/api/drive/v3"
@@ -14,9 +15,9 @@ import (
 var readfiles = []string{"ideas.txt", "memorial-days.txt", "daily-reminder.txt"}
 
 var fileRandomProbabilityMap = map[string]float32{
-	"ideas.txt":          1, // plain text
-	"memorial-days.txt":  0, // formatting text
-	"daily-reminder.txt": 1, // plain text
+	"ideas.txt":          1,   // plain text
+	"memorial-days.txt":  1,   // formatting text
+	"daily-reminder.txt": 0.3, // plain text
 }
 
 func main() {
@@ -47,11 +48,12 @@ func main() {
 }
 
 func generateSendStr(files []*drive.File) (sendStr string) {
-	for _, filename := range readfiles {
+	for _, filename := range readfiles { // 按顺序
 		for _, f := range files {
 			if f.Name != filename {
 				continue
 			}
+			// 1. 是否读此文件？
 			rf := rand.Float32()
 			log.Info(fmt.Sprintf("%s\t%s\t%s: %b\n", f.Id, f.Name, f.Md5Checksum, rf))
 			if rf > fileRandomProbabilityMap[filename] {
@@ -63,12 +65,18 @@ func generateSendStr(files []*drive.File) (sendStr string) {
 				sendStr += fmt.Sprintf("read f.Name failed, error: %v\n", err)
 				continue
 			}
-			sendStr += string(fileContent)
+			// 2. 不同文件，不同格式，读数据方式不同
+			if filename == "memorial-days.txt" {
+				sendStr += service.ReadFormattingText(fileContent)
+			} else {
+				sendStr += service.RandomLine(fileContent)
+			}
 		}
 	}
 	return
 }
 
+// TODO service.send.go
 func send(text string) error {
 	robotKey := env.GetEnv("BOT_KEY", "")
 	robot := model.Robot{Key: robotKey}

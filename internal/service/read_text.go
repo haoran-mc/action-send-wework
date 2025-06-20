@@ -3,7 +3,9 @@ package service
 import (
 	"bufio"
 	"bytes"
+	"math/rand"
 	"strings"
+	"time"
 
 	"github.com/haoran-mc/action-send-wework/pkg/timeutil"
 	"github.com/haoran-mc/golib/pkg/log"
@@ -29,9 +31,22 @@ func ReadFormattingText(text []byte) (ret string) {
 		}
 		ss := strings.Split(line, "~")
 		if len(ss) != 2 {
+			log.Warn("wrong line format: " + line)
 			continue
 		}
-		if yes, err := timeutil.TodaySpecialDate(ss[0]); err != nil && yes {
+		t, err := timeutil.ToTime(ss[0])
+		if err != nil {
+			log.Warn("wrong time format", err)
+			continue
+		}
+
+		// match
+		now := time.Now()
+		ok := t.Month() == now.Month() && t.Day() == now.Day()
+		if ok && t.Year() != 0 {
+			ok = t.Year() == now.Year()
+		}
+		if ok {
 			ret += ss[1]
 		}
 	}
@@ -39,4 +54,18 @@ func ReadFormattingText(text []byte) (ret string) {
 		log.Error("error in reading formatting text", err)
 	}
 	return
+}
+
+func RandomLine(text []byte) string {
+	lines := bytes.Split(text, []byte("\n"))
+	nonEmpty := lines[:0]
+	for _, l := range lines {
+		if len(bytes.TrimSpace(l)) > 0 {
+			nonEmpty = append(nonEmpty, l)
+		}
+	}
+	if len(nonEmpty) == 0 {
+		return ""
+	}
+	return string(nonEmpty[rand.Intn(len(nonEmpty))])
 }
