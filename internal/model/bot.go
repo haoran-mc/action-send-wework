@@ -7,12 +7,12 @@ import (
 )
 
 // refer https://work.weixin.qq.com/api/doc/90000/90136/91770
-type Robot struct {
+type Bot struct {
 	Key string
 }
 
 // 机器人接口请求
-type RobotRequest struct {
+type BotRequest struct {
 	MsgType string `json:"msgtype"`
 	Text    struct {
 		Content string `json:"content"`
@@ -20,19 +20,19 @@ type RobotRequest struct {
 }
 
 // 机器人接口响应
-type RobotResponse struct {
+type BotResponse struct {
 	ErrorCode    int64  `json:"errcode"`
 	ErrorMessage string `json:"errmsg"`
 }
 
 // 拼接地址
-func (r *Robot) CreateBaseURL() string {
+func (r *Bot) CreateBaseURL() string {
 	return fmt.Sprintf("https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=%s", r.Key)
 }
 
 // 发送纯文本
-func (r *Robot) SendText(text string) (res *RobotResponse, err error) {
-	data := RobotRequest{
+func (r *Bot) SendText(text string) (res *BotResponse, err error) {
+	data := BotRequest{
 		MsgType: "text",
 		Text: struct {
 			Content string `json:"content"`
@@ -43,7 +43,7 @@ func (r *Robot) SendText(text string) (res *RobotResponse, err error) {
 	baseURL := r.CreateBaseURL()
 	err = http.PostJson(baseURL, data)
 	if err != nil {
-		return &RobotResponse{
+		return &BotResponse{
 			ErrorCode:    -1,
 			ErrorMessage: "fail to request",
 		}, err

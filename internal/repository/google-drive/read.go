@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/haoran-mc/golib/pkg/env"
 	"github.com/haoran-mc/golib/pkg/log"
 	"golang.org/x/oauth2/google"
 	"google.golang.org/api/drive/v3"
@@ -14,8 +13,7 @@ import (
 
 var driveService *drive.Service
 
-func InitDriveService() (err error) {
-	credentialsJSON := env.GetEnv("GDRIVE_CREDENTIALS", "")
+func InitDriveService(credentialsJSON string) (err error) {
 	if credentialsJSON == "" {
 		log.Error("empty environment variable GDRIVE_CREDENTIALS")
 		return fmt.Errorf("credentials JSON is empty")

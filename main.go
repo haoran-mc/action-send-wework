@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"math/rand"
 
-	"github.com/haoran-mc/action-send-wework/internal/model"
 	googledrive "github.com/haoran-mc/action-send-wework/internal/repository/google-drive"
 	"github.com/haoran-mc/action-send-wework/internal/service"
 	"github.com/haoran-mc/golib/pkg/env"
@@ -22,7 +21,8 @@ var fileRandomProbabilityMap = map[string]float32{
 
 func main() {
 	var err error
-	err = googledrive.InitDriveService()
+	credentialsJSON := env.GetEnv("GDRIVE_CREDENTIALS", "")
+	err = googledrive.InitDriveService(credentialsJSON)
 	if err != nil {
 		// TODO 重试
 	}
@@ -41,7 +41,8 @@ func main() {
 	}
 
 	// 3. wework bot send
-	err = send(sendStr)
+	botKey := env.GetEnv("BOT_KEY", "")
+	err = service.BotSend(botKey, sendStr)
 	if err != nil {
 		// TODO 重试
 	}
@@ -74,19 +75,4 @@ func generateSendStr(files []*drive.File) (sendStr string) {
 		}
 	}
 	return
-}
-
-// TODO service.send.go
-func send(text string) error {
-	robotKey := env.GetEnv("BOT_KEY", "")
-	robot := model.Robot{Key: robotKey}
-
-	res, err := robot.SendText(text)
-	if err != nil {
-		log.Error("fail to send text", err)
-	} else if res != nil && res.ErrorCode != 0 {
-		log.Error("fail to send text", res.ErrorMessage)
-		err = fmt.Errorf("fail to send text, " + res.ErrorMessage)
-	}
-	return err
 }
