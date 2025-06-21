@@ -47,7 +47,7 @@ func ReadFormattingText(text []byte) (ret string) {
 			ok = t.Year() == now.Year()
 		}
 		if ok {
-			ret += "🍭️" + ss[1] + "\n"
+			ret += ss[1] + "\n"
 		}
 	}
 	if err := scanner.Err(); err != nil {
@@ -67,5 +67,5 @@ func RandomLine(text []byte) string {
 	if len(nonEmpty) == 0 {
 		return ""
 	}
-	return "🍭️" + string(nonEmpty[rand.Intn(len(nonEmpty))]) + "\n"
+	return string(nonEmpty[rand.Intn(len(nonEmpty))]) + "\n"
 }
