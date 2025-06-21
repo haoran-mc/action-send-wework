@@ -47,7 +47,7 @@ func ReadFormattingText(text []byte) (ret string) {
 			ok = t.Year() == now.Year()
 		}
 		if ok {
-			ret += ss[1]
+			ret += ss[1] + "\n"
 		}
 	}
 	if err := scanner.Err(); err != nil {
