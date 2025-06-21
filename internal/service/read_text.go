@@ -67,5 +67,5 @@ func RandomLine(text []byte) string {
 	if len(nonEmpty) == 0 {
 		return ""
 	}
-	return string(nonEmpty[rand.Intn(len(nonEmpty))])
+	return string(nonEmpty[rand.Intn(len(nonEmpty))]) + "\n"
 }
