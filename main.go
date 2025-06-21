@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"math/rand"
+	"time"
 
 	googledrive "github.com/haoran-mc/action-send-wework/internal/repository/google-drive"
 	"github.com/haoran-mc/action-send-wework/internal/service"
@@ -21,31 +22,40 @@ var fileRandomProbabilityMap = map[string]float32{
 
 func main() {
 	var err error
-	credentialsJSON := env.GetEnv("GDRIVE_CREDENTIALS", "")
-	err = googledrive.InitDriveService(credentialsJSON)
-	if err != nil {
-		// TODO 重试
-	}
+	for range 5 {
+		time.Sleep(10 * time.Second)
 
-	// 1. read googledrive shared directory
-	dirID := env.GetEnv("DIR_ID", "")
-	files, err := googledrive.ReadDir(dirID)
-	if err != nil {
-		// TODO 重试
-	}
+		credentialsJSON := env.GetEnv("GDRIVE_CREDENTIALS", "")
+		err = googledrive.InitDriveService(credentialsJSON) // TODO 单例模式
+		if err != nil {
+			log.Error("fail to init drive service", err)
+			continue
+		}
 
-	// 2. read files and generate the send str
-	sendStr := generateSendStr(files)
-	if len(sendStr) == 0 {
-		sendStr = "青山落日，秋月春风。当真是朝如青丝暮成雪，是非成败转头空。"
-	}
+		// 1. read googledrive shared directory
+		dirID := env.GetEnv("DIR_ID", "")
+		files, err := googledrive.ReadDir(dirID)
+		if err != nil {
+			log.Error("fail to read shared directory", err)
+			continue
+		}
 
-	// 3. wework bot send
-	botKey := env.GetEnv("BOT_KEY", "")
-	err = service.BotSend(botKey, sendStr)
-	if err != nil {
-		// TODO 重试
+		// 2. read files and generate the send str
+		sendStr := generateSendStr(files)
+		if len(sendStr) == 0 {
+			sendStr = "青山落日，秋月春风。当真是朝如青丝暮成雪，是非成败转头空。"
+		}
+
+		// 3. wework bot send
+		botKey := env.GetEnv("BOT_KEY", "")
+		err = service.BotSend(botKey, sendStr)
+		if err != nil {
+			log.Error("bot send message failed", err)
+			continue
+		}
+		break
 	}
+	log.Info("successfully")
 }
 
 func generateSendStr(files []*drive.File) (sendStr string) {
