@@ -68,7 +68,7 @@ func generateSendStr(files []*drive.File) string {
 			}
 			// 1. 是否读此文件？
 			rf := rand.Float32()
-			log.Info(fmt.Sprintf("%s\t%s\t%s: %b\n", f.Id, f.Name, f.Md5Checksum, rf))
+			// log.Info(fmt.Sprintf("%s\t%s\t%s: %b\n", f.Id, f.Name, f.Md5Checksum, rf))
 			if rf > fileRandomProbabilityMap[filename] {
 				continue
 			}

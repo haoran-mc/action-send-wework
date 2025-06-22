@@ -24,6 +24,8 @@ import (
 1. 年份 0000 只匹配日期
 */
 
+const dateFormatStr = "20060102"
+
 func ReadFormattingText(text []byte) (ret []string) {
 	scanner := bufio.NewScanner(bytes.NewReader(text))
 	for scanner.Scan() {
@@ -38,10 +40,19 @@ func ReadFormattingText(text []byte) (ret []string) {
 		}
 
 		ok := false
-		nowyyyyMMdd := time.Now().Format("20060102")
-		if startsWithDigit(ss[0]) && nowyyyyMMdd == ss[0] { // 阳历
-			ok = true
+		now := time.Now()
+		if startsWithDigit(ss[0]) { // 阳历
+			t, err := time.Parse(dateFormatStr, ss[0])
+			if err != nil {
+				log.Warn("wrong solar date format", err)
+				continue
+			}
+			ok = t.Month() == now.Month() && t.Day() == now.Day()
+			if ok && t.Year() != 0 {
+				ok = t.Year() == now.Year()
+			}
 		} else { // 农历
+			nowyyyyMMdd := now.Format(dateFormatStr)
 			nowLunar := timeutil.Lunar(nowyyyyMMdd)
 			if strings.HasSuffix(nowLunar, ss[0]) {
 				ok = true
