@@ -16,9 +16,9 @@ import (
 var readfiles = []string{"ideas.txt", "daily-reminder.txt", "memorial-days.txt"}
 
 var fileRandomProbabilityMap = map[string]float32{
-	"ideas.txt":          1,   // plain text
-	"daily-reminder.txt": 0.3, // plain text
-	"memorial-days.txt":  1,   // formatting text
+	"ideas.txt":          1, // plain text
+	"daily-reminder.txt": 1, // plain text
+	"memorial-days.txt":  1, // formatting text
 }
 
 func main() {
