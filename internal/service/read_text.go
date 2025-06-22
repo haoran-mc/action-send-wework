@@ -6,9 +6,10 @@ import (
 	"math/rand"
 	"strings"
 	"time"
+	"unicode"
 
-	"github.com/haoran-mc/action-send-wework/pkg/timeutil"
 	"github.com/haoran-mc/golib/pkg/log"
+	"github.com/haoran-mc/golib/pkg/timeutil"
 )
 
 /*
@@ -18,6 +19,7 @@ import (
 00000622~Z生日
 20250628~交房租
 00001024~程序员节
+四月廿五~我的农历生日
 
 1. 年份 0000 只匹配日期
 */
@@ -34,17 +36,16 @@ func ReadFormattingText(text []byte) (ret []string) {
 			log.Warn("wrong line format: " + line)
 			continue
 		}
-		t, err := timeutil.ToTime(ss[0])
-		if err != nil {
-			log.Warn("wrong time format", err)
-			continue
-		}
 
-		// match
-		now := time.Now()
-		ok := t.Month() == now.Month() && t.Day() == now.Day()
-		if ok && t.Year() != 0 {
-			ok = t.Year() == now.Year()
+		ok := false
+		nowyyyyMMdd := time.Now().Format("20060102")
+		if startsWithDigit(ss[0]) && nowyyyyMMdd == ss[0] { // 阳历
+			ok = true
+		} else { // 农历
+			nowLunar := timeutil.Lunar(nowyyyyMMdd)
+			if strings.HasSuffix(nowLunar, ss[0]) {
+				ok = true
+			}
 		}
 		if ok {
 			ret = append(ret, ss[1])
@@ -54,6 +55,13 @@ func ReadFormattingText(text []byte) (ret []string) {
 		log.Error("error in reading formatting text", err)
 	}
 	return
+}
+
+func startsWithDigit(s string) bool {
+	for _, r := range s {
+		return unicode.IsDigit(r)
+	}
+	return false
 }
 
 func RandomLine(text []byte) string {

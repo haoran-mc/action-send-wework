@@ -25,8 +25,8 @@ github.com/googleapis/enterprise-certificate-proxy v0.3.6 h1:GW/XbdyBFQ8Qe+YAmFU
 github.com/googleapis/enterprise-certificate-proxy v0.3.6/go.mod h1:MkHOF77EYAE7qfSuSS9PU6g4Nt4e11cnsDUowfwewLA=
 github.com/googleapis/gax-go/v2 v2.14.2 h1:eBLnkZ9635krYIPD+ag1USrOAI0Nr0QYF3+/3GqO0k0=
 github.com/googleapis/gax-go/v2 v2.14.2/go.mod h1:ON64QhlJkhVtSqp4v1uaK92VyZ2gmvDQsweuyLV+8+w=
-github.com/haoran-mc/golib v0.0.0-20250616160847-47564dd387c3 h1:CRfksT8zQKBdN/bIWConS4G8a1aRuKSCLGQOI8dbG/Q=
-github.com/haoran-mc/golib v0.0.0-20250616160847-47564dd387c3/go.mod h1:HI1SxlsuNpTt+ybcMBkBS6G8s19TjX5MBMBmFQdPQHg=
+github.com/haoran-mc/golib v0.0.0-20250622123538-630101b54565 h1:5PydJ38kY4GWhNnokbKm/bJt8NHD7N0jOrG73RK7Quc=
+github.com/haoran-mc/golib v0.0.0-20250622123538-630101b54565/go.mod h1:YfAq1hQNO+vgXVVMwdk/0DMcRR6VWAxoPBvHUua7RHQ=
 github.com/labstack/echo/v4 v4.13.4 h1:oTZZW+T3s9gAu5L8vmzihV7/lkXGZuITzTQkTEhcXEA=
 github.com/labstack/echo/v4 v4.13.4/go.mod h1:g63b33BZ5vZzcIUF8AtRH40DrTlXnx4UMC8rBdndmjQ=
 github.com/labstack/gommon v0.4.2 h1:F8qTUNXgG1+6WQmqoUWnz8WiEU60mXVVw0P4ht1WRA0=

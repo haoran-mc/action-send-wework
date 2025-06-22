@@ -3,7 +3,7 @@ module github.com/haoran-mc/action-send-wework
 go 1.23.2
 
 require (
-	github.com/haoran-mc/golib v0.0.0-20250616160847-47564dd387c3
+	github.com/haoran-mc/golib v0.0.0-20250622123538-630101b54565
 	golang.org/x/oauth2 v0.30.0
 	google.golang.org/api v0.237.0
 )
