@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"math/rand"
+	"strings"
 	"time"
 
 	googledrive "github.com/haoran-mc/action-send-wework/internal/repository/google-drive"
@@ -12,12 +13,12 @@ import (
 	"google.golang.org/api/drive/v3"
 )
 
-var readfiles = []string{"ideas.txt", "memorial-days.txt", "daily-reminder.txt"}
+var readfiles = []string{"ideas.txt", "daily-reminder.txt", "memorial-days.txt"}
 
 var fileRandomProbabilityMap = map[string]float32{
 	"ideas.txt":          1,   // plain text
-	"memorial-days.txt":  1,   // formatting text
 	"daily-reminder.txt": 0.3, // plain text
+	"memorial-days.txt":  1,   // formatting text
 }
 
 func main() {
@@ -58,7 +59,8 @@ func main() {
 	log.Info("successfully")
 }
 
-func generateSendStr(files []*drive.File) (sendStr string) {
+func generateSendStr(files []*drive.File) string {
+	msgs := []string{}
 	for _, filename := range readfiles { // 按顺序
 		for _, f := range files {
 			if f.Name != filename {
@@ -73,16 +75,19 @@ func generateSendStr(files []*drive.File) (sendStr string) {
 			fileContent, err := googledrive.ReadFile(f.Id)
 			if err != nil {
 				log.Error("fail to read file", err)
-				sendStr += fmt.Sprintf("read f.Name failed, error: %v\n", err)
+				msgs = append(msgs, fmt.Sprintf("read f.Name failed, error: %v\n", err))
 				continue
 			}
 			// 2. 不同文件，不同格式，读数据方式不同
-			if filename == "memorial-days.txt" {
-				sendStr += service.ReadFormattingText(fileContent)
-			} else {
-				sendStr += service.RandomLine(fileContent)
+			switch filename {
+			case "ideas.txt":
+				msgs = append(msgs, service.RandomLine(fileContent))
+			case "daily-reminder.txt":
+				msgs = append(msgs, service.RandomLine(fileContent))
+			case "memorial-days.txt":
+				msgs = append(msgs, service.ReadFormattingText(fileContent)...)
 			}
 		}
 	}
-	return
+	return strings.Join(msgs, "\n")
 }

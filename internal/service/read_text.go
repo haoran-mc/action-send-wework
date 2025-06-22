@@ -22,7 +22,7 @@ import (
 1. 年份 0000 只匹配日期
 */
 
-func ReadFormattingText(text []byte) (ret string) {
+func ReadFormattingText(text []byte) (ret []string) {
 	scanner := bufio.NewScanner(bytes.NewReader(text))
 	for scanner.Scan() {
 		line := scanner.Text()
@@ -47,7 +47,7 @@ func ReadFormattingText(text []byte) (ret string) {
 			ok = t.Year() == now.Year()
 		}
 		if ok {
-			ret += ss[1] + "\n"
+			ret = append(ret, ss[1])
 		}
 	}
 	if err := scanner.Err(); err != nil {
@@ -67,5 +67,5 @@ func RandomLine(text []byte) string {
 	if len(nonEmpty) == 0 {
 		return ""
 	}
-	return string(nonEmpty[rand.Intn(len(nonEmpty))]) + "\n"
+	return string(nonEmpty[rand.Intn(len(nonEmpty))])
 }
