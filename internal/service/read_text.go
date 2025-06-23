@@ -3,6 +3,7 @@ package service
 import (
 	"bufio"
 	"bytes"
+	"fmt"
 	"math/rand"
 	"strings"
 	"time"
@@ -38,6 +39,9 @@ func ReadFormattingText(text []byte) (ret []string) {
 
 		ok := false
 		now := time.Now()
+		fmt.Println(now)
+		// now := time.Now().Add(8 * time.Hour)
+
 		if startsWithDigit(ss[0]) { // 阳历
 			t, err := time.Parse(dateFormatStr, ss[0])
 			if err != nil {
