@@ -27,7 +27,7 @@ func main() {
 		time.Sleep(10 * time.Second)
 
 		credentialsJSON := env.GetEnv("GDRIVE_CREDENTIALS", "")
-		err = googledrive.InitDriveService(credentialsJSON) // TODO 单例模式
+		err = googledrive.InitDriveService(credentialsJSON)
 		if err != nil {
 			log.Error("fail to init drive service", err)
 			continue
