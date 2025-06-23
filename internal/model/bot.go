@@ -11,7 +11,6 @@ type Bot struct {
 	Key string
 }
 
-// 机器人接口请求
 type BotRequest struct {
 	MsgType string `json:"msgtype"`
 	Text    struct {
@@ -19,18 +18,15 @@ type BotRequest struct {
 	} `json:"text,omitempty"`
 }
 
-// 机器人接口响应
 type BotResponse struct {
 	ErrorCode    int64  `json:"errcode"`
 	ErrorMessage string `json:"errmsg"`
 }
 
-// 拼接地址
 func (r *Bot) CreateBaseURL() string {
 	return fmt.Sprintf("https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=%s", r.Key)
 }
 
-// 发送纯文本
 func (r *Bot) SendText(text string) (res *BotResponse, err error) {
 	data := BotRequest{
 		MsgType: "text",
