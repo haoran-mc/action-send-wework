@@ -17,6 +17,7 @@ import (
 20250628~交房租
 00001024~程序员节
 七月十五~中元节
+20191113~去年今天(2019)，加入Github
 
 1. 年份 0000 只匹配日期
 */
@@ -46,9 +47,6 @@ func ReadFormattingText(text []byte) (ret []string) {
 				continue
 			}
 			ok = t.Month() == now.Month() && t.Day() == now.Day()
-			if ok && t.Year() != 0 {
-				ok = t.Year() == now.Year()
-			}
 		} else { // 农历
 			nowyyyyMMdd := now.Format(dateFormatStr)
 			nowLunar := timeutil.Lunar(nowyyyyMMdd)
